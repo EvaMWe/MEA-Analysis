@@ -42,6 +42,7 @@ for m = 1:nbM
     numbSpikes = cell(maxNbWell+2, nbG);
     nbContrCh = cell(maxNbWell+2, nbG);
     MFR = cell(maxNbWell+2, nbG);
+    CoV_MFR = cell(maxNbWell+2, nbG);
     wMFR = cell(maxNbWell+2, nbG);
     w2tMFR = cell(maxNbWell+2, nbG);
     ISIavg = cell(maxNbWell+2, nbG);
@@ -50,8 +51,7 @@ for m = 1:nbM
     
     for gr = 1:nbG
         grNam = listOfGroups{1,gr};
-        wells = listOfGroups(2:end,gr);
-        
+        wells = listOfGroups(2:end,gr);       
         
         
         %nbVal = length(wells);
@@ -78,29 +78,36 @@ for m = 1:nbM
         MFR(2,gr) = {grNam};
         MFR(3:length(dataSub(1,log')')+2,gr) = dataSub(3,log')';
         
+        %Coefficient of Variance per well
+        CoV_MFR(1,1) = {'coefficient of variance per well'};
+        CoV_MFR(2,gr) = {grNam};
+        CoV_MFR(3:length(dataSub(1,log')')+2,gr) = dataSub(4,log')';
+  
+        
         %weighted firing rate per well
         wMFR(1,1) = {'weighted mean firing rate per well'};
         wMFR(2,gr) = {grNam};
-        wMFR(3:length(dataSub(1,log')')+2,gr) = dataSub(4,log')';
+        wMFR(3:length(dataSub(1,log')')+2,gr) = dataSub(5,log')';
         
         %firing rate weighted to total electrode number per well
         w2tMFR(1,1) = {'mean firing weighted 2 total el. number per well'};
         w2tMFR(2,gr) = {grNam};
-        w2tMFR(3:length(dataSub(1,log')')+2,gr) = dataSub(5,log')';
+        w2tMFR(3:length(dataSub(1,log')')+2,gr) = dataSub(6,log')';
         
         %averaged inter spike interval per well
         ISIavg(1,1) = {'averaged inter spike interval per well'};
         ISIavg(2,gr) = {grNam};
-        ISIavg(3:length(dataSub(1,log')')+2,gr) = dataSub(6,log')';
+        ISIavg(3:length(dataSub(1,log')')+2,gr) = dataSub(7,log')';
         
         %standard deviation of inter spike interval per well
         ISIstd(1,1) = {'averaged inter spike interval per well'};
         ISIstd(2,gr) = {grNam};
-        ISIstd(3:length(dataSub(1,log')')+2,gr) = dataSub(6,log')';
+        ISIstd(3:length(dataSub(1,log')')+2,gr) = dataSub(8,log')';
         
         go2stat_spikeCalculator.numbSpikes = numbSpikes;
         go2stat_spikeCalculator.numbContrEl = nbContrCh;
         go2stat_spikeCalculator.MFR = MFR;
+        go2stat_spikeCalculator.CoV_MFR = CoV_MFR;
         go2stat_spikeCalculator.wMFR = wMFR;
         go2stat_spikeCalculator.w2tMFR = w2tMFR;
         go2stat_spikeCalculator.ISIavg = ISIavg;

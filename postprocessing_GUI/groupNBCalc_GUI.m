@@ -48,6 +48,7 @@ for m = 1:nbM
     
     %preallocate cells for data storage // one cell per parameter
     nbNB = cell(maxNbWell+2, nbG);
+    rateNB = cell(maxNbWell+2, nbG);
     avg_DNB = cell(maxNbWell+2, nbG); %mean burst rate
     std_DNB = cell(maxNbWell+2, nbG);
     avg_nbSp = cell(maxNbWell+2, nbG); %mean burst duration
@@ -73,36 +74,41 @@ for m = 1:nbM
         nbNB(2,gr) = {grNam};
         nbNB(3:length(dataSub(1,log')')+2,gr) = dataSub(1,log')';
         
+         %NBrate per well
+        nbNB(1,1) = {'NB rate'};
+        nbNB(2,gr) = {grNam};
+        nbNB(3:length(dataSub(1,log')')+2,gr) = dataSub(2,log')';
+        
         %mean network burst duration per well
         avg_DNB(1,1) = {'mean network burst duration per well'};
         avg_DNB(2,gr) = {grNam};
-        avg_DNB(3:length(dataSub(1,log')')+2,gr) = dataSub(2,log')';
+        avg_DNB(3:length(dataSub(1,log')')+2,gr) = dataSub(3,log')';
         
         
         %standard deviation of network burst duration
         std_DNB(1,1) = {'standard deviation of network burst duration'};
         std_DNB(2,gr) = {grNam};
-        std_DNB(3:length(dataSub(1,log')')+2,gr) = dataSub(3,log')';
+        std_DNB(3:length(dataSub(1,log')')+2,gr) = dataSub(4,log')';
         
         %average number of Spikes per NB in a well
         avg_nbSp(1,1) = {'average number of Spikes per NB in a well'};
         avg_nbSp(2,gr) = {grNam};
-        avg_nbSp(3:length(dataSub(1,log')')+2,gr) = dataSub(4,log')';
+        avg_nbSp(3:length(dataSub(1,log')')+2,gr) = dataSub(5,log')';
         
         %standard deviation of Spikes per NB in a well
         std_nbSp(1,1) = {'standard deviation of Spikes per NB in a well'};
         std_nbSp(2,gr) = {grNam};
-        std_nbSp(3:length(dataSub(1,log')')+2,gr) = dataSub(5,log')';
+        std_nbSp(3:length(dataSub(1,log')')+2,gr) = dataSub(6,log')';
         
         %average number of contributing electrodes per well
         avg_nbCh(1,1) = {'average number of contributing electrodes per well'};
         avg_nbCh(2,gr) = {grNam};
-        avg_nbCh(3:length(dataSub(1,log')')+2,gr) = dataSub(6,log')';
+        avg_nbCh(3:length(dataSub(1,log')')+2,gr) = dataSub(7,log')';
         
         %standard deviation of contributing electrodes per well
         std_nbCh(1,1) = {'standard deviation of contributing electrodes per well'};
         std_nbCh(2,gr) = {grNam};
-        std_nbCh(3:length(dataSub(1,log')')+2,gr) = dataSub(6,log')';
+        std_nbCh(3:length(dataSub(1,log')')+2,gr) = dataSub(8,log')';
         
         go2stat_NBCalculator.numberOfNB = nbNB;
         go2stat_NBCalculator.avg_DNB = avg_DNB;
@@ -128,25 +134,27 @@ end
 
 function [resultCell] = rearrangeNB(data)
 nbWells = length(data);
-resultCell = cell(1+7,1+nbWells);
+resultCell = cell(1+8,1+nbWells);
 resultCell(1,1) = {'name of well'};
 resultCell(2,1) = {'number of network bursts'};
-resultCell(3,1) = {'avg_DNB'}; %mean duration of NB
-resultCell(4,1) = {'std_DNB'};
-resultCell(5,1) = {'avg_number of spikes'};
-resultCell(6,1) = {'std_number of spikes'};
-resultCell(7,1) = {'avg_ number of contributing electrodes'};
-resultCell(8,1) = {'std_number of contributing electrodes'};
+resultCell(3,1) = {'network burst rate'};
+resultCell(4,1) = {'avg_DNB'}; %mean duration of NB
+resultCell(5,1) = {'std_DNB'};
+resultCell(6,1) = {'avg_number of spikes'};
+resultCell(7,1) = {'std_number of spikes'};
+resultCell(8,1) = {'avg_ number of contributing electrodes'};
+resultCell(9,1) = {'std_number of contributing electrodes'};
 
 for well = 1:nbWells
     wellName = data(well).wellName;
     resultCell(1,1+well) = {wellName};
     resultCell(2,1+well) = {data(well).networkBurstsData.number_of_NB};
-    resultCell(3,1+well) = {data(well).networkBurstsData.average_duration_of_NB};
-    resultCell(4,1+well) = {data(well).networkBurstsData.standardDeviation_duration_of_NB};
-    resultCell(5,1+well) = {data(well).networkBurstsData.average_number_of_spikes};
-    resultCell(6,1+well) = {data(well).networkBurstsData.stdNumbSpikes};
-    resultCell(7,1+well) = {data(well).networkBurstsData.average_nb_of_contr_channele};
-    resultCell(8,1+well) = {data(well).networkBurstsData.standardDeviation_of_contr_channels};
+    resultCell(3,1+well) = {data(well).networkBurstsData.NBrate};
+    resultCell(4,1+well) = {data(well).networkBurstsData.average_duration_of_NB};
+    resultCell(5,1+well) = {data(well).networkBurstsData.standardDeviation_duration_of_NB};
+    resultCell(6,1+well) = {data(well).networkBurstsData.average_number_of_spikes};
+    resultCell(7,1+well) = {data(well).networkBurstsData.stdNumbSpikes};
+    resultCell(8,1+well) = {data(well).networkBurstsData.average_nb_of_contr_channele};
+    resultCell(9,1+well) = {data(well).networkBurstsData.standardDeviation_of_contr_channels};
 end
 end

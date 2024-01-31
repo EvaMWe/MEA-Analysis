@@ -14,7 +14,7 @@ if ~isnan(str2double(sheetname))
     sheetname =str2double(sheetname);
 end
 opts.Sheet = sheetname;
-opts.DataRange = 'A3';
+opts.DataRange = 'A2';
 if exist('variableNames','var')
     opts.VariableNames = variableNames;
 end

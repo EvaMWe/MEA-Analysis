@@ -17,27 +17,24 @@
 %       the names of the groups, values are selected from several wells
 
 
-function stat_ConnCalculator = groupConnCalc_GUI(names, sheetname,  nbGroups, groupingFile)
+function stat_ConnCalculator = groupConnCalc_GUI_(names, sheetname,  nbGroups, groupingFile, fileNames, pathName)
 
 listOfGroups = xlsx2mat_grouping_GUI(sheetname,  nbGroups ,names, groupingFile);
 
-[fileNames, pathName] = uigetfile('*.*','select data from folder networkBurst','MultiSelect','on');
-
 nbG = size(listOfGroups,2);         %number of groups
 maxNbWell = size(listOfGroups,1)-1; %maximum number of wells per group
-nbM = length(fileNames);
 
 if ~iscell(fileNames)
     fileNames = cellstr(fileNames);
 end
 
-
+nbM = length(fileNames);
 
 stat_ConnCalculator = repmat(struct('measurement_name',[]),1,nbM);
 
 for m = 1:nbM
     data = load(fullfile(pathName,fileNames{m}),'-mat');
-    data = data.connectivitymm; 
+    data = data.data; 
     
     %% rearrange data and return data cell
     data = rearrangeConn(data);

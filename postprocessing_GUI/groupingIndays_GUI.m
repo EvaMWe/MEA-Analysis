@@ -14,14 +14,11 @@ else
     timepoints = [1, length(dataStore)];
 end
 
-for f = 1:nbFeatures
-    
+for f = 1:nbFeatures    
     
     meanData = zeros(nbwells,nbPeriods,nbGroups);
-    stdData = zeros(nbwells,nbPeriods,nbGroups);
-    
-    dataArray= dataStore(f).dataArray;
-    
+    stdData = zeros(nbwells,nbPeriods,nbGroups);    
+    dataArray= dataStore(f).dataArray;   
     
     
     for p = 1:nbPeriods
