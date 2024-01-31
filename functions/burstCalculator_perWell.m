@@ -65,7 +65,7 @@ for well = 1:numWell
     MNSB(1,well) = MNSB_well;
     
     %% standard deviation of spikes per burst per well
-    std_NSB_well = sqrt(mean(cell2mat(listValid(5,:)).^2,'omitnan'));
+    std_NSB_well = std(cell2mat(listValid(5,:)),'omitnan');
     SdNSB(1,well) = std_NSB_well;
 
 end

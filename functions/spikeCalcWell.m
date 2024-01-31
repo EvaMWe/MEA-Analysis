@@ -37,14 +37,15 @@ end
 numberSpikes = zeros(1,numWell);
 numbPartEl = zeros(1,numWell);
 MFR = zeros(1,numWell);
+CoV_MFR = zeros(1,numWell);
 wMFR = zeros(1,numWell);
 w2absMFR = zeros(1,numWell);
 ISI_avg = zeros(1,numWell);
 ISI_std = zeros(1,numWell);
 
-sum_Well = cell(8, numWell+1);
+sum_Well = cell(9, numWell+1);
 variableNames = {'Name of Electrode';'Number of Spikes per well'; 'number of contributing electrodes per well';...
-    'Mean Firing Rate'; 'Weighted Mean Firing Rate';'Weigthed to Absolute ElectrodeNumber';...
+    'Mean Firing Rate'; 'Cov MFR';'Weighted Mean Firing Rate';'Weigthed to Absolute ElectrodeNumber';...
     'Inter Spike Interval (avg)';'Inter Spike Interval (std)'};
 sum_Well(:,1) = variableNames;
 sum_Well(1,2:end) = wellNames;
@@ -57,6 +58,10 @@ for well = 1:numWell
     [nums, empty] = conversion(nums,1);
     numsVec = conversion(nums,2);
     
+    %%calculate MFR on individual electrodes for statistc measures:
+    MFRel = arrayfun(@(i) nnz(nums(:,i)),1:size(nums,2))./interval;
+    CoV_MFR_ = std(MFRel)/mean(MFRel);
+    CoV_MFR(1,well) = CoV_MFR_;
     %% calculate the whole number of spike across the well
     nSpikes = length(numsVec);
     numberSpikes(1,well) = nSpikes;
@@ -113,15 +118,17 @@ end
 sum_Well(2,2:end) = num2cell(numberSpikes);
 sum_Well(3,2:end) = num2cell(numbPartEl);
 sum_Well(4,2:end) = num2cell(MFR);
-sum_Well(5,2:end) = num2cell(wMFR);
-sum_Well(6,2:end) = num2cell(w2absMFR);
-sum_Well(7,2:end) = num2cell(ISI_avg);
-sum_Well(8,2:end) = num2cell(ISI_std);
+sum_Well(5,2:end) = num2cell(CoV_MFR);
+sum_Well(6,2:end) = num2cell(wMFR);
+sum_Well(7,2:end) = num2cell(w2absMFR);
+sum_Well(8,2:end) = num2cell(ISI_avg);
+sum_Well(9,2:end) = num2cell(ISI_std);
 
 %put all data into a data struct for storage:
 results.numberSpikes = numberSpikes;
 results.numbPartEl = numbPartEl;
 results.MeanFiringRate = MFR;
+results.CoV_MFR = CoV_MFR;
 results.weightedMeanFiringRate = wMFR;
 results.weighted2totalNumbElMFR = w2absMFR;
 results.ISI_avg = ISI_avg;

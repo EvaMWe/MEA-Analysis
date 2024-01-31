@@ -43,7 +43,7 @@
 %
 % HINT: summary: a nxm cell array containing duration, number of spikes and number of contributing electrodes 
 
-function result = networkBurstCalc(TS)
+function result = networkBurstCalc(TS, interval)
 
 nCh = size(TS,2);
 nSample = size(TS,1);
@@ -65,8 +65,9 @@ NBstop = find(sLogDiff == -1) + 1 -len; %subtract 1250 because of the dilatation
 %'lastEnd'
 if length(NBstart) < 6 || length(NBstop) < 6
     result.number_of_NB = 0;
+    result.NBrate = 0;
     result.duration_of_one_NB = 0;
-    result.average_duration_of_NB =0;
+    result.average_duration_of_NB =0;   
     result.standardDeviation_duration_of_NB = 0;
     result.number_of_spikes_per_NB = 0;
     result.average_number_of_spikes = 0;
@@ -139,7 +140,7 @@ if length(NBstop) < length(NBstart)
     NBstart = NBstart(1:length(NBstop),1);
 end
 nNB = length(NBstart);
-durationNB = NBstop-NBstart;
+durationNB = (NBstop-NBstart)/(len*10);
 durationNB_avg = mean(durationNB);
 durationNB_std = std(durationNB);
 avgNumbSpikes = mean(numbSpike); %average of number of spikes
@@ -161,6 +162,7 @@ NBcell(5,2:end) = NB_stamps(1:nNB);
 
 % put into a data struct for storage
 result.number_of_NB = nNB;
+result.NBrate = nNB/interval;
 result.duration_of_one_NB = durationNB;
 result.average_duration_of_NB =durationNB_avg;
 result.standardDeviation_duration_of_NB = durationNB_std;
